@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Supabase Тест</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <h1>Supabase Байланыс Тесті</h1>
+    <div id="status">Тексерілуде...</div>
+    <div id="data"></div>
+
+    <script>
+        // СІЗДІҢ SUPABASE ДЕРЕКТЕРІҢІЗ
+        const SUPABASE_URL = 'https://pqzmkluncqflgypuuawl.supabase.co';
+        const SUPABASE_KEY = 'СІЗДІҢ_ANON_KEY'; // Project Settings → API → anon public
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function testConnection() {
+            try {
+                // Проблемалар кестесін тексеру
+                const { data, error } = await supabase
+                    .from('problems')
+                    .select('*')
+                    .limit(3);
+
+                if (error) throw error;
+
+                document.getElementById('status').innerHTML =
+                    '<span style="color: green;">✅ Байланыс сәтті!</span>';
+
+                document.getElementById('data').innerHTML =
+                    `<h3>Табылған есептер: ${data.length}</h3>
+                     <pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+            } catch (err) {
+                document.getElementById('status').innerHTML =
+                    `<span style="color: red;">❌ Қате: ${err.message}</span>`;
+            }
+        }
+
+        testConnection();
+    </script>
+</body>
+
+</html>
