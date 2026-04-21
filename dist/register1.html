@@ -317,6 +317,8 @@
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" crossorigin src="/assets/main-DRt6vc65.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/auth-DfyYPuF3.js">
 </head>
 
 <body>
@@ -418,96 +420,8 @@
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/api.js"></script>
-    <script>
-        // 1. Авторизация аймағын басқару
-        async function renderAuthArea() {
-            const authArea = document.getElementById('authArea');
-            if (!window._db) return;
-
-            const { data: { session } } = await window._db.auth.getSession();
-            const user = session?.user;
-
-            if (user) {
-                // Есімнің бірінші әріпін алу
-                const name = user.user_metadata?.full_name || user.email;
-                const firstLetter = name.charAt(0).toUpperCase();
-
-                authArea.innerHTML = `
-                    <div class="user-avatar" onclick="toggleMenu()">${firstLetter}</div>
-                    <div id="userMenu" class="user-dropdown">
-                        <p>${name}</p>
-                        <button class="logout-btn" onclick="doLogout()">
-                            <i class='bx bx-log-out'></i> Шығу
-                        </button>
-                    </div>
-                `;
-            } else {
-                authArea.innerHTML = `<a href="index1.html" class="btn-primary">Тіркелу</a>`;
-            }
-        }
-
-        // 2. Мәзірді ашу/жабу
-        function toggleMenu() {
-            const menu = document.getElementById('userMenu');
-            menu.classList.toggle('show');
-        }
-
-        // 3. Шығу функциясы
-        async function doLogout() {
-            if (window._db) {
-                await window._db.auth.signOut();
-                window.location.reload(); // Бетті жаңарту
-            }
-        }
-
-        // Бет жүктелгенде тексеру
-        window.addEventListener('load', renderAuthArea);
-
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('#authArea')) {
-                const menu = document.getElementById('userMenu');
-                if (menu) menu.classList.remove('show');
-            }
-        });
-    </script>
-
-    <script>
-        let selectedLang = '';
-
-        function startLangSelected() {
-            if (!selectedLang) return;
-            window.location.href = 'index1.html';
-        }
-
-        function selectLang(lang) {
-            selectedLang = lang;
-
-            // Барлық карточкалардан белгіні алып тастау
-            document.querySelectorAll('.card').forEach(card => {
-                card.style.borderColor = '#d1d5db';
-                card.style.background = '#fff';
-                card.style.transform = 'scale(1)';
-            });
-
-            // Таңдалған карточканы белгілеу (жасыл түсті тема)
-            const selectedCard = document.getElementById('card-' + lang);
-            selectedCard.style.borderColor = '#407740';
-            selectedCard.style.background = '#f0fdf4';
-            selectedCard.style.transform = 'scale(1.02)';
-
-            // Батырманы белсендіру (жасыл түсті)
-            const btn = document.getElementById('start-btn');
-            btn.innerText = 'Оқуды бастау →';
-            btn.style.background = '#407740';
-            btn.style.color = '#fff';
-            btn.style.cursor = 'pointer';
-            btn.style.boxShadow = '0 10px 25px rgba(64, 119, 64, 0.3)';
-        }
-
-
-    </script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
     <section id="trial">
         <h2>Толық ақпарат</h2>
@@ -577,7 +491,7 @@
     <!-- Font Awesome қосу -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
 
-    <style>
+    <style type="module">
         /* Батырмалар стилі */
         .social-buttons {
             display: flex;
@@ -650,79 +564,7 @@
 
     <!-- Font Awesome қосу -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
-
-    <script>
-        // 1. Түнгі режим функциясы
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        // 2. Роботпен сөйлесу
-        function toggleSpeech() {
-            const bubble = document.getElementById('bubble');
-            bubble.style.display = 'block';
-
-            setTimeout(() => {
-                bubble.style.display = 'none';
-            }, 4000);
-        }
-
-        // 3. Сабақты ашу және есептерді құру
-        function openLesson(name, videoUrl) {
-            document.getElementById('lesson-placeholder').style.display = 'none';
-            const box = document.getElementById('lesson-content');
-            box.style.display = 'block';
-
-            document.getElementById('lesson-title').innerText = name + " негіздері";
-            document.getElementById('video').src = videoUrl;
-
-            // 50 есепті автоматты құру
-            const grid = document.getElementById('task-grid');
-            grid.innerHTML = '';
-            for (let i = 1; i <= 50; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'task-btn';
-                btn.innerText = i;
-                btn.onclick = function () { alert(name + " тілі бойынша #" + i + " тапсырма: Код жазыңыз."); };
-                grid.appendChild(btn);
-            }
-
-            // Сабаққа автоматты жылжу
-            window.location.hash = '#trial';
-        }
-    </script>
-    <script>
-        // YouTube API жүктеу
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtubePlayer', {
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            var isPlaying = false;
-            var btn = document.getElementById('musicControl');
-
-            btn.addEventListener('click', function () {
-                if (!isPlaying) {
-                    player.playVideo();
-                    btn.textContent = "⏹️";
-                } else {
-                    player.pauseVideo();
-                    btn.textContent = "▶️";
-                }
-                isPlaying = !isPlaying;
-            });
-        }
-    </script>
+
     <title>CodeSchool | Сабақ</title>
     <style>
         :root {
@@ -779,49 +621,7 @@
 
 
 
-
-    <script>
-
-        const params = new URLSearchParams(window.location.search);
-        const lang = params.get("lang");
-
-        const data = {
-
-            python: {
-                title: "Python сабағы",
-                theory: "Python — AI, Web, Data үшін қолданылатын жеңіл тіл."
-            },
-
-            cpp: {
-                title: "C++ сабағы",
-                theory: "C++ — жылдам жүйелік және ойын тілі."
-            },
-
-            csharp: {
-                title: "C# сабағы",
-                theory: "C# — Unity және бизнеске арналған тіл."
-            }
-
-        };
-
-        if (data[lang]) {
-
-            document.getElementById("title").innerText = data[lang].title;
-            document.getElementById("theory").innerText = data[lang].theory;
-
-            const div = document.getElementById("tasks");
-
-            for (let i = 1; i <= 25; i++) {
-
-                const t = document.createElement("div");
-                t.className = "task";
-                t.innerText = "Тапсырма " + i;
-
-                div.appendChild(t);
-            }
-
-        }
-    </script>
+
     <style>
         .comment-section {
             display: flex;
@@ -948,36 +748,8 @@
                 font-size: 16px !important;
             }
         }
-    </style>
-    <script>
-        document.getElementById("sendBtn").addEventListener("click", function () {
-
-            const phoneNumber = "7783244107"; // 👉 номеріңді жаз
-            const name = document.getElementById("name").value.trim();
-            const message = document.getElementById("message").value.trim();
-
-            if (!name || !message) {
-                alert("Өтініш, барлық өрістерді толтырыңыз");
-                return;
-            }
-
-            const fullMessage =
-                "Сәлеметсіз бе!%0A" +
-                "Аты: " + name + "%0A" +
-                "Пікірі: " + message;
-
-            const url = "https://wa.me/" + phoneNumber + "?text=" + fullMessage;
-
-            window.open(url, "_blank");
-
-            // Өрістерді тазалау
-            document.getElementById("name").value = "";
-            document.getElementById("message").value = "";
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
+    </style>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 
 </html>

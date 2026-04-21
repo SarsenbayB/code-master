@@ -418,9 +418,9 @@
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/api.js"></script>
-    <script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module">
         // 1. Авторизация аймағын басқару
         async function renderAuthArea() {
             const authArea = document.getElementById('authArea');
@@ -473,7 +473,7 @@
         });
     </script>
 
-    <script>
+    <script type="module">
         let selectedLang = '';
 
         function startLangSelected() {
@@ -577,7 +577,7 @@
     <!-- Font Awesome қосу -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
 
-    <style>
+    <style type="module">
         /* Батырмалар стилі */
         .social-buttons {
             display: flex;
@@ -651,7 +651,7 @@
     <!-- Font Awesome қосу -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
 
-    <script>
+    <script type="module">
         // 1. Түнгі режим функциясы
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
@@ -691,7 +691,7 @@
             window.location.hash = '#trial';
         }
     </script>
-    <script>
+    <script type="module">
         // YouTube API жүктеу
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -780,7 +780,7 @@
 
 
 
-    <script>
+    <script type="module">
 
         const params = new URLSearchParams(window.location.search);
         const lang = params.get("lang");
@@ -949,7 +949,7 @@
             }
         }
     </style>
-    <script>
+    <script type="module">
         document.getElementById("sendBtn").addEventListener("click", function () {
 
             const phoneNumber = "7783244107"; // 👉 номеріңді жаз
@@ -975,9 +975,9 @@
             document.getElementById("message").value = "";
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/auth.js"></script>
 </body>
 
 </html>
