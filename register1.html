@@ -476,37 +476,43 @@
     <script>
         let selectedLang = '';
 
+        // Маршруты для каждого языка
+        const LANG_ROUTES = {
+            python: 'b.html?lang=python',        // твой готовый Python-курс
+            cpp: 'b.html?lang=cpp',    // b.html с параметром lang
+            csharp: 'b.html?lang=csharp'  // b.html с параметром lang
+        };
+
         function startLangSelected() {
             if (!selectedLang) return;
-            window.location.href = 'index1.html';
+            const url = LANG_ROUTES[selectedLang];
+            if (url) {
+                window.location.href = url;
+            }
         }
 
         function selectLang(lang) {
             selectedLang = lang;
 
-            // Барлық карточкалардан белгіні алып тастау
             document.querySelectorAll('.card').forEach(card => {
                 card.style.borderColor = '#d1d5db';
                 card.style.background = '#fff';
                 card.style.transform = 'scale(1)';
             });
 
-            // Таңдалған карточканы белгілеу (жасыл түсті тема)
             const selectedCard = document.getElementById('card-' + lang);
             selectedCard.style.borderColor = '#407740';
             selectedCard.style.background = '#f0fdf4';
             selectedCard.style.transform = 'scale(1.02)';
 
-            // Батырманы белсендіру (жасыл түсті)
             const btn = document.getElementById('start-btn');
-            btn.innerText = 'Оқуды бастау →';
+            const labels = { python: 'Python', cpp: 'C++', csharp: 'C#' };
+            btn.innerText = labels[lang] + ' курсын бастау →';
             btn.style.background = '#407740';
             btn.style.color = '#fff';
             btn.style.cursor = 'pointer';
             btn.style.boxShadow = '0 10px 25px rgba(64, 119, 64, 0.3)';
         }
-
-
     </script>
 
     <section id="trial">

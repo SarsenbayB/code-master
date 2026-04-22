@@ -550,24 +550,14 @@
         let curI = 0;
 
         window.onload = function () {
-            const user = localStorage.getItem("currentUser");
-            localStorage.setItem("task_" + user, curI);
-
-            if (!user) {
-                alert("Алдымен тіркел!");
-                window.location.href = "register.html";
-                return;
-            }
-
-            const savedTask = localStorage.getItem("task_" + user);
-
-            if (savedTask) {
-                curI = parseInt(savedTask);
-            } else {
-                curI = 0;
-            }
-
-            loadTask(curI);
+            curI = 0;
+            // Автоматически читаем lang из URL если есть
+            const params = new URLSearchParams(window.location.search);
+            const lang = params.get('lang');
+            if (lang === 'cpp') start('C++');
+            else if (lang === 'csharp') start('C#');
+            else if (lang === 'python') start('Python');
+            // иначе показываем экран выбора языка
         }
         // PYTHON ТАПСЫРМАЛАРЫ (25)
         const pythonLessons = [
