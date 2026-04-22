@@ -18,8 +18,8 @@ const db = {
         if (!user) return;
         const profile = await this.getProfile(user.id);
         if (!profile) {
-            const { error } = await _db.from('profiles').insert([{ 
-                id: user.id, 
+            const { error } = await _db.from('profiles').insert([{
+                id: user.id,
                 full_name: user.user_metadata?.full_name || user.email.split('@')[0],
                 xp: 0,
                 streak_days: 1
@@ -33,10 +33,10 @@ const db = {
         // Fetch fresh profile right before update to prevent race conditions
         const { data: profile, error: fError } = await _db.from('profiles').select('xp').eq('id', userId).single();
         if (fError) throw fError;
-        
+
         const newXp = (profile.xp || 0) + additionalXp;
         const { error: uError } = await _db.from('profiles').update({ xp: newXp }).eq('id', userId);
-        
+
         if (uError) {
             console.error(">>> [Backend] XP Update Error:", uError);
             if (window.uiManager) window.uiManager.showToast('XP сақтау қатесі: ' + uError.message, 'error');
@@ -76,7 +76,7 @@ const db = {
 
     async solveProblem(userId, problemId) {
         console.log(`>>> [Backend] Marking problem ${problemId} as solved...`);
-        
+
         // Update Local Storage for instant feedback
         const localKey = `solved_${userId}`;
         const localSolved = JSON.parse(localStorage.getItem(localKey) || "[]");
@@ -87,7 +87,7 @@ const db = {
 
         const { error } = await _db.from('user_problems')
             .insert([{ user_id: userId, problem_id: Number(problemId) }]);
-            
+
         if (error && error.code !== '23505') {
             console.error(">>> [Backend] solveProblem DB Error:", error);
         }

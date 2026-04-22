@@ -321,8 +321,6 @@
             }
         }
     </style>
-  <script type="module" crossorigin src="/assets/login-BWil6F1k.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/auth-DfyYPuF3.js">
 </head>
 
 <body>
@@ -389,8 +387,80 @@
         </div>
     </div>
 
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
 
+    <script>
+        const container = document.querySelector('.container');
+        const registerBtn = document.querySelector('.register-btn');
+        const loginBtn = document.querySelector('.login-btn');
+
+        registerBtn.addEventListener('click', () => container.classList.add('active'));
+        loginBtn.addEventListener('click', () => container.classList.remove('active'));
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'bx-check-circle' : 'bx-error-circle';
+            toast.innerHTML = `<i class='bx ${icon}'></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('active'), 10);
+            setTimeout(() => {
+                toast.classList.remove('active');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // REGISTER LOGIC
+        const regForm = document.getElementById('regForm');
+        regForm.onsubmit = async function (e) {
+            e.preventDefault();
+            const fullName = document.getElementById('regFullName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const btn = document.getElementById('regBtn');
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loader"></span> Жүктелуде...';
+                await auth.register(email, password, fullName);
+                showToast("Тіркелу сәтті! Енді жүйеге кіре аласыз.", "success");
+                // Wait a bit then switch to login
+                setTimeout(() => {
+                    container.classList.remove('active');
+                    btn.disabled = false;
+                    btn.innerHTML = 'Тіркелу';
+                }, 2000);
+            } catch (error) {
+                showToast(error.message, "error");
+                btn.disabled = false;
+                btn.innerHTML = 'Тіркелу';
+            }
+        };
+
+        // LOGIN LOGIC
+        const loginForm = document.getElementById('loginForm');
+        loginForm.onsubmit = async function (e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loader"></span> Кіру...';
+                await auth.login(email, password);
+                showToast("Қош келдіңіз!", "success");
+                window.location.href = 'register1.html#home';
+            } catch (error) {
+                showToast(error.message, "error");
+                btn.disabled = false;
+                btn.innerHTML = 'Кіру';
+            }
+        };
+    </script>
 </body>
 
 </html>
