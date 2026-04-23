@@ -11,6 +11,7 @@ export default defineConfig({
         main: 'register1.html',
         login: 'index1.html',
         dashboard: 'dashboard.html',
+        b: 'b.html',
       },
     },
   },

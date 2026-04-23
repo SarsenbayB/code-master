@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="kk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSchool - Программалау Курсы</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+        :root {
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --primary: #407740;
+            --text-main: #0f172a;
+            --text-dim: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --accent: #f1f5f9;
+            --border: #e2e8f0;
+            --warning: #f59e0b;
+            --csharp: #9b4f96;
+            --cpp: #00599c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 100vw;
+            height: 100vh;
+            transition: 0.4s;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .lang-cards {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .lang-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 24px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .lang-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .lang-card i {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .lang-card.python i {
+            color: #3776ab;
+        }
+
+        .lang-card.csharp i {
+            color: var(--csharp);
+        }
+
+        .lang-card.cpp i {
+            color: var(--cpp);
+        }
+
+        .lang-card h3 {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            background: var(--white);
+        }
+
+        .sidebar {
+            width: 320px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            background: #fcfcfd;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+        }
+
+        .task-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .task-node {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: not-allowed;
+            opacity: 0.4;
+        }
+
+        .task-node.unlocked {
+            cursor: pointer;
+            opacity: 1;
+            background: #fff;
+            border: 1px solid var(--border);
+        }
+
+        .task-node.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .task-node.csharp-active {
+            background: var(--csharp);
+            color: white;
+            border-color: var(--csharp);
+        }
+
+        .task-node.cpp-active {
+            background: var(--cpp);
+            color: white;
+            border-color: var(--cpp);
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .theory-area {
+            height: 55%;
+            padding: 30px;
+            overflow-y: auto;
+            border-bottom: 1px solid var(--border);
+            background: #fff;
+        }
+
+        .theory-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .theory-label.csharp {
+            color: var(--csharp);
+        }
+
+        .theory-label.cpp {
+            color: var(--cpp);
+        }
+
+        .task-description {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .task-description.csharp {
+            border-left-color: var(--csharp);
+        }
+
+        .task-description.cpp {
+            border-left-color: var(--cpp);
+        }
+
+        .task-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .task-text {
+            line-height: 1.8;
+            color: #334155;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .io-section {
+            margin: 15px 0;
+        }
+
+        .io-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .io-title.csharp {
+            color: var(--csharp);
+        }
+
+        .io-title.cpp {
+            color: var(--cpp);
+        }
+
+        .io-content {
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            color: #475569;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .example-table th {
+            background: var(--primary);
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .example-table th.csharp {
+            background: var(--csharp);
+        }
+
+        .example-table th.cpp {
+            background: var(--cpp);
+        }
+
+        .example-table td {
+            padding: 10px;
+            border: 1px solid var(--border);
+            background: #fff;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .example-table tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        .complexity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e0f2fe;
+            color: #0369a1;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            margin-right: 5px;
+        }
+
+        .practice-area {
+            flex: 1;
+            display: flex;
+            background: #f1f5f9;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .editor-top {
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #code-input {
+            flex: 1;
+            padding: 20px;
+            font-family: 'JetBrains Mono';
+            font-size: 14px;
+            border: none;
+            outline: none;
+            resize: none;
+            line-height: 1.6;
+        }
+
+        .terminal {
+            width: 380px;
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+            color: #fff;
+            font-family: 'JetBrains Mono';
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-header {
+            opacity: 0.5;
+            font-size: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .terminal-content {
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .btn-run {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-run:hover {
+            background: #365c36;
+        }
+
+        .btn-run.csharp {
+            background: var(--csharp);
+        }
+
+        .btn-run.csharp:hover {
+            background: #7a3d7a;
+        }
+
+        .btn-run.cpp {
+            background: var(--cpp);
+        }
+
+        .btn-run.cpp:hover {
+            background: #004a7f;
+        }
+
+        .btn-help {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-help:hover {
+            background: #d97706;
+        }
+
+        .ai-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .ai-modal.active {
+            display: flex;
+        }
+
+        .ai-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ai-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--warning);
+        }
+
+        .ai-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .ai-text {
+            line-height: 1.8;
+            color: #334155;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="welcome" class="screen welcome-screen">
+        <h1 style="font-size: 40px; font-weight: 800;">CodeSchool</h1>
+        <p style="color: var(--text-dim); margin-bottom: 50px;">Тілді таңдап, үйренуді бастаңыз</p>
+        <div class="lang-cards">
+            <div class="lang-card python" onclick="start('Python')"><i class='bx bxl-python'></i>
+                <h3>Python</h3>
+            </div>
+            <div class="lang-card csharp" onclick="start('C#')"><i class='bx bxl-visual-studio'></i>
+                <h3>C#</h3>
+            </div>
+            <div class="lang-card cpp" onclick="start('C++')"><i class='bx bxl-c-plus-plus'></i>
+                <h3>C++</h3>
+            </div>
+        </div>
+    </div>
+
+    <div id="app" class="screen hidden">
+        <div class="app-container">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <button class="back-btn" onclick="goBack()"><i class='bx bx-chevron-left'></i></button>
+                    <span id="cur-lang" style="font-weight: 800;">Python Курсы</span>
+                </div>
+                <div id="task-list" class="task-list"></div>
+            </aside>
+
+            <main class="content">
+                <div class="theory-area">
+                    <div id="task-content"></div>
+                </div>
+
+                <div class="practice-area">
+                    <div class="editor-container">
+                        <div class="editor-top">
+                            <span id="filename" style="font-size: 12px; color: var(--text-dim);">Program.cs</span>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn-help" onclick="showAIHelp()"><i class='bx bx-brain'></i> AI
+                                    Көмек</button>
+                                <button id="check-btn" class="btn-run" onclick="checkCode()">Тексеру</button>
+                            </div>
+                        </div>
+                        <textarea id="code-input" spellcheck="false"
+                            placeholder="// Кодты осында жазыңыз..."></textarea>
+                    </div>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <span>CONSOLE</span>
+                            <span id="status-badge">Дайын</span>
+                        </div>
+                        <div id="out" class="terminal-content">> Жүйе дайын...</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="ai-modal" class="ai-modal" onclick="closeAIModal(event)">
+        <div class="ai-content" onclick="event.stopPropagation()">
+            <div class="ai-header">
+                <div class="ai-title"><i class='bx bx-brain'></i> AI Көмекші</div>
+                <button class="ai-close" onclick="closeAIModal()">&times;</button>
+            </div>
+            <div id="ai-text" class="ai-text"></div>
+        </div>
+    </div>
+
+    <script>
+        // 👇 ОСЫ ЖЕРГЕ ҚОС
+        let curI = 0;
+
+        window.onload = function () {
+            curI = 0;
+            // Автоматически читаем lang из URL если есть
+            const params = new URLSearchParams(window.location.search);
+            const lang = params.get('lang');
+            if (lang === 'cpp') start('C++');
+            else if (lang === 'csharp') start('C#');
+            else if (lang === 'python') start('Python');
+            // иначе показываем экран выбора языка
+        }
+        // PYTHON ТАПСЫРМАЛАРЫ (25)
+        const pythonLessons = [
+            {
+                id: 1, title: "A + B", complexity: "2%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан A және B берілген. Олардың қосындысын табу керек.",
+                input: "Бір қатарда екі бүтін сан беріледі (A және B). Сандар 10^9-дан аспайды.",
+                output: "Бір қатарда A + B қосындысын шығарыңыз.",
+                examples: [{ input: "2 3", output: "5" }, { input: "10 20", output: "30" }],
+                check: (code) => code.includes('input') && code.includes('print') && code.includes('+'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('input')) errors.push("input() функциясы жоқ - сандарды оқу керек");
+                    if (!code.includes('print')) errors.push("print() функциясы жоқ - нәтижені шығару керек");
+                    if (!code.includes('+')) errors.push("Қосу операциясы (+) табылмады");
+                    return errors;
+                },
+                aiHelp: "Бұл тапсырмада input().split() арқылы екі санды оқыңыз, int() түріне айналдырып, қосыңыз да print() арқылы шығарыңыз. Мысалы: a, b = map(int, input().split())"
+            },
+            {
+                id: 2, title: "Үш санның қосындысы", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Үш бүтін сан берілген. Олардың қосындысын табыңыз.",
+                input: "Бір қатарда үш бүтін сан беріледі.",
+                output: "Бір қатарда үш санның қосындысын шығарыңыз.",
+                examples: [{ input: "1 2 3", output: "6" }, { input: "5 10 15", output: "30" }],
+                check: (code) => code.includes('input') && code.includes('print') && code.includes('+'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('input')) errors.push("Сандарды оқу үшін input() қажет");
+                    if (!code.includes('print')) errors.push("Нәтижені шығару үшін print() қажет");
+                    return errors;
+                },
+                aiHelp: "Екі сандық тапсырма сияқты, бірақ енді үш айнымалы қажет. a, b, c = map(int, input().split()) деп алып, print(a + b + c) жасаңыз."
+            },
+            {
+                id: 3, title: "Айырма", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Алып тастағыштан азайтқышты азайту керек (A - B).",
+                input: "Екі бүтін сан A және B беріледі.",
+                output: "A - B айырмасын шығарыңыз.",
+                examples: [{ input: "10 3", output: "7" }, { input: "5 8", output: "-3" }],
+                check: (code) => code.includes('input') && code.includes('print') && code.includes('-'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('input')) errors.push("input() функциясы жоқ");
+                    if (!code.includes('-')) errors.push("Азайту операциясы (-) табылмады");
+                    return errors;
+                },
+                aiHelp: "Азайту операциясы - қолданылады. Ескерту: тапсырмада A - B керек, яғни бірінші саннан екіншіні азайту керек."
+            },
+            {
+                id: 4, title: "Көбейтінді", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Олардың көбейтіндісін табыңыз.",
+                input: "Екі бүтін сан A және B.",
+                output: "A * B көбейтіндісін шығарыңыз.",
+                examples: [{ input: "4 5", output: "20" }, { input: "7 3", output: "21" }],
+                check: (code) => code.includes('input') && code.includes('print') && code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('*')) errors.push("Көбейту операциясы (*) табылмады");
+                    return errors;
+                },
+                aiHelp: "Көбейту үшін * белгісін қолданыңыз. Мысалы: result = a * b"
+            },
+            {
+                id: 5, title: "Бөлінді", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Бөліндіні бүтін санға бөлуден табыңыз (A // B).",
+                input: "Екі бүтін сан A және B (B ≠ 0).",
+                output: "A // B бүтін бөліндісін шығарыңыз.",
+                examples: [{ input: "17 5", output: "3" }, { input: "20 4", output: "5" }],
+                check: (code) => code.includes('//') || (code.includes('/') && code.includes('int')),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('//') && !code.includes('/')) errors.push("Бөлу операциясы табылмады");
+                    return errors;
+                },
+                aiHelp: "Python-да бүтін бөлу // операторымен жасалады. Қарапайым / болса, бөлшек сан шығады."
+            },
+            {
+                id: 6, title: "Қалдық", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Біріншіні екіншісіне бөлгендегі қалдықты табыңыз.",
+                input: "Екі бүтін сан A және B.",
+                output: "A % B қалдығын шығарыңыз.",
+                examples: [{ input: "17 5", output: "2" }, { input: "20 4", output: "0" }],
+                check: (code) => code.includes('%'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%')) errors.push("Қалдықты табу үшін % операторы керек");
+                    return errors;
+                },
+                aiHelp: "Қалдықты табу үшін % (модуль) операторын қолданыңыз."
+            },
+            {
+                id: 7, title: "Үшбұрыштың периметрі", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Үшбұрыштың үш қабырғасының ұзындығы берілген. Периметрін табыңыз.",
+                input: "Үш бүтін сан - қабырғалар ұзындығы.",
+                output: "Периметрін шығарыңыз.",
+                examples: [{ input: "3 4 5", output: "12" }, { input: "10 10 10", output: "30" }],
+                check: (code) => code.includes('input') && code.includes('print'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('input')) errors.push("Қабырғаларды оқу керек");
+                    return errors;
+                },
+                aiHelp: "Үш санды оқыңыз және оларды қосыңыз. Периметр = a + b + c"
+            },
+            {
+                id: 8, title: "Тік төртбұрыштың ауданы", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Тік төртбұрыштың екі қабырғасы берілген. Ауданын табыңыз.",
+                input: "Екі бүтін сан - ені мен ұзындығы.",
+                output: "Ауданын шығарыңыз.",
+                examples: [{ input: "5 3", output: "15" }, { input: "10 10", output: "100" }],
+                check: (code) => code.includes('input') && code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('*')) errors.push("Аудан = ені × ұзындық, көбейту керек");
+                    return errors;
+                },
+                aiHelp: "Тік төртбұрыш ауданы = ені × биіктік. Екі санды көбейтіңіз."
+            },
+            {
+                id: 9, title: "Шеңбердің ұзындығы", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Шеңбердің радиусы берілген. Ұзындығын табыңыз (L = 2πR). π = 3.14 деп алғыңыз.",
+                input: "Бір бүтін сан - радиус R.",
+                output: "Шеңбер ұзындығын шығарыңыз.",
+                examples: [{ input: "5", output: "31.4" }, { input: "10", output: "62.8" }],
+                check: (code) => code.includes('2') && (code.includes('3.14') || code.includes('3,14')),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('3.14') && !code.includes('3,14')) errors.push("π = 3.14 мәнін қолданыңыз");
+                    if (!code.includes('2')) errors.push("2πR формуласындағы 2 саны жоқ");
+                    return errors;
+                },
+                aiHelp: "Формула: L = 2 * 3.14 * R. Ескерту: π = 3.14 деп алынған."
+            },
+            {
+                id: 10, title: "Градусты радианға айналдыру", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Бұрыш градус берілген. Радианға айналдырыңыз (rad = deg × π / 180).",
+                input: "Бір нақты сан - градус.",
+                output: "Радиан мәнін шығарыңыз (π = 3.14).",
+                examples: [{ input: "180", output: "3.14" }, { input: "90", output: "1.57" }],
+                check: (code) => code.includes('3.14') && code.includes('180'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('3.14')) errors.push("π = 3.14 мәнін қолданыңыз");
+                    if (!code.includes('180')) errors.push("180-ге бөлу керек");
+                    return errors;
+                },
+                aiHelp: "Формула: радиан = градус × 3.14 / 180. Бөліп, көбейтудің дұрыс тәртібін сақтаңыз."
+            },
+            {
+                id: 11, title: "Екі санның ортақ еселігі", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Ең кіші ортақ еселігін (ЕКОЕ) табыңыз.",
+                input: "Екі бүтін сан A және B.",
+                output: "ЕКОЕ санын шығарыңыз.",
+                examples: [{ input: "12 18", output: "36" }, { input: "5 7", output: "35" }],
+                check: (code) => code.includes('while') || code.includes('for') || code.includes('def'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('while') && !code.includes('for')) errors.push("Цикл қажет - ЕКОЕ табу үшін");
+                    return errors;
+                },
+                aiHelp: "ЕКОЕ табу үшін: max(a,b) дан бастап цикл жүргізіп, a және b-ға бөлінетін бірінші санды табу керек. Или формула: ЕКОЕ = (a*b) // ЕҮОБ(a,b)"
+            },
+            {
+                id: 12, title: "Екі санның ортақ бөлгіші", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Ең үлкен ортақ бөлгішін (ЕҮОБ) табыңыз.",
+                input: "Екі бүтін сан A және B.",
+                output: "ЕҮОБ санын шығарыңыз.",
+                examples: [{ input: "48 18", output: "6" }, { input: "100 25", output: "25" }],
+                check: (code) => code.includes('while') || code.includes('def'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('while') && !code.includes('for')) errors.push("Цикл немесе рекурсия қажет");
+                    return errors;
+                },
+                aiHelp: "Евклид алгоритмі: while b: a, b = b, a % b. Соңында a ЕҮОБ болады."
+            },
+            {
+                id: 13, title: "Санның квадраты", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Бір сан берілген. Оның квадратын табыңыз.",
+                input: "Бір бүтін сан N.",
+                output: "N² мәнін шығарыңыз.",
+                examples: [{ input: "5", output: "25" }, { input: "12", output: "144" }],
+                check: (code) => code.includes('**2') || (code.includes('*') && code.split('*').length > 2),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('**') && code.split('*').length <= 2) errors.push("Квадраттау операциясы (**2 немесе n*n) табылмады");
+                    return errors;
+                },
+                aiHelp: "Квадраттау: n ** 2 немесе n * n"
+            },
+            {
+                id: 14, title: "Санның кубы", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Бір сан берілген. Оның кубын табыңыз.",
+                input: "Бір бүтін сан N.",
+                output: "N³ мәнін шығарыңыз.",
+                examples: [{ input: "3", output: "27" }, { input: "5", output: "125" }],
+                check: (code) => code.includes('**3') || (code.includes('**') && code.includes('3')),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('**')) errors.push("Дәреже операциясы (**3) қажет");
+                    return errors;
+                },
+                aiHelp: "Кубтау: n ** 3 немесе n * n * n"
+            },
+            {
+                id: 15, title: "Температура түрлендіру", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Цельсий бойынша температура берілген. Фаренгейтке айналдырыңыз (F = C × 9/5 + 32).",
+                input: "Бір нақты сан - Цельсий.",
+                output: "Фаренгейт температурасын шығарыңыз.",
+                examples: [{ input: "0", output: "32" }, { input: "100", output: "212" }],
+                check: (code) => code.includes('9') && code.includes('5') && code.includes('32'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('32')) errors.push("Формулада +32 қосу керек");
+                    if (!code.includes('9') || !code.includes('5')) errors.push("9/5 немесе 1.8 көбейту керек");
+                    return errors;
+                },
+                aiHelp: "Формула: F = C * 9/5 + 32. Немесе F = C * 1.8 + 32. Амалдар тәртібін сақтаңыз!"
+            },
+            {
+                id: 16, title: "Минимум екі саннан", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Ең кішісін табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Ең кіші санын шығарыңыз.",
+                examples: [{ input: "5 3", output: "3" }, { input: "10 20", output: "10" }],
+                check: (code) => code.includes('min') || code.includes('if') || code.includes('<'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('min') && !code.includes('if') && !code.includes('<')) errors.push("min() функциясы немесе if шарты қажет");
+                    return errors;
+                },
+                aiHelp: "min(a, b) функциясын қолданыңыз немесе if a < b: print(a) else: print(b)"
+            },
+            {
+                id: 17, title: "Максимум екі саннан", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Ең үлкенін табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Ең үлкен санын шығарыңыз.",
+                examples: [{ input: "5 3", output: "5" }, { input: "10 20", output: "20" }],
+                check: (code) => code.includes('max') || code.includes('if') || code.includes('>'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('max') && !code.includes('if') && !code.includes('>')) errors.push("max() функциясы немесе if шарты қажет");
+                    return errors;
+                },
+                aiHelp: "max(a, b) функциясын қолданыңыз немесе if a > b: print(a) else: print(b)"
+            },
+            {
+                id: 18, title: "Үш санның ең кішісі", complexity: "7%", time: "1 сек", memory: "16 МБ",
+                description: "Үш сан берілген. Ең кішісін табыңыз.",
+                input: "Үш бүтін сан.",
+                output: "Ең кіші санын шығарыңыз.",
+                examples: [{ input: "5 3 8", output: "3" }, { input: "10 20 5", output: "5" }],
+                check: (code) => code.includes('min') || code.includes('if'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('min') && !code.includes('if')) errors.push("min() немесе if шарттары қажет");
+                    return errors;
+                },
+                aiHelp: "min(a, b, c) деп үш санды да бере аласыз. Немесе min(min(a, b), c)"
+            },
+            {
+                id: 19, title: "Жұп немесе тақ", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Бір сан берілген. Жұп екенін тексеріңіз.",
+                input: "Бір бүтін сан N.",
+                output: "Жұп болса 'EVEN', тақ болса 'ODD' деп шығарыңыз.",
+                examples: [{ input: "4", output: "EVEN" }, { input: "7", output: "ODD" }],
+                check: (code) => code.includes('%') && (code.includes('EVEN') || code.includes('ODD')),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%')) errors.push("2-ге бөліндірлігін тексеру үшін % 2 операторы керек");
+                    if (!code.includes('if')) errors.push("Шартты тексеру if қажет");
+                    return errors;
+                },
+                aiHelp: "if n % 2 == 0: print('EVEN') else: print('ODD'). % 2 қалдығын 0-ге тексеру керек."
+            },
+            {
+                id: 20, title: "Мұздықта жүзу", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Температура берілген. Егер 0-ден төмен болса 'ICE', әйтпесе 'WATER' деп шығарыңыз.",
+                input: "Бір нақты сан - температура.",
+                output: "'ICE' немесе 'WATER'.",
+                examples: [{ input: "-5", output: "ICE" }, { input: "10", output: "WATER" }],
+                check: (code) => code.includes('if') && (code.includes('ICE') || code.includes('WATER')),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('if')) errors.push("Шартты тексеру if қажет");
+                    if (!code.includes('<')) errors.push("0-ден төмендігін тексеру керек (< 0)");
+                    return errors;
+                },
+                aiHelp: "if temp < 0: print('ICE') else: print('WATER')"
+            },
+            {
+                id: 21, title: "Санның модульді", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Сан берілген. Оның модулін табыңыз (абсолюттік мәні).",
+                input: "Бір бүтін сан (теріс болуы мүмкін).",
+                output: "Модулін шығарыңыз.",
+                examples: [{ input: "-5", output: "5" }, { input: "10", output: "10" }],
+                check: (code) => code.includes('abs') || (code.includes('if') && code.includes('<')),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('abs') && !code.includes('if')) errors.push("abs() функциясы немесе if шарты қажет");
+                    return errors;
+                },
+                aiHelp: "abs(n) функциясы модульді табуға арналған. Немесе if n < 0: print(-n) else: print(n)"
+            },
+            {
+                id: 22, title: "Үш сан сұрыптау", complexity: "10%", time: "1 сек", memory: "16 МБ",
+                description: "Үш сан берілген. Өсу бойынша сұрыптаңыз.",
+                input: "Үш бүтін сан.",
+                output: "Өсу бойынша сұрыпталған сандар (бос орынмен бөлінген).",
+                examples: [{ input: "3 1 2", output: "1 2 3" }, { input: "5 5 1", output: "1 5 5" }],
+                check: (code) => code.includes('sorted') || code.includes('sort') || code.includes('if'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('sorted') && !code.includes('sort') && !code.includes('if')) errors.push("Сұрыптау үшін sorted() немесе if шарттары қажет");
+                    return errors;
+                },
+                aiHelp: "sorted([a, b, c]) тізімді сұрыптайды. Немесе қолмен if арқылы салыстырулар."
+            },
+            {
+                id: 23, title: "Арифметикалық прогрессия", complexity: "12%", time: "1 сек", memory: "16 МБ",
+                description: "Прогрессияның бірінші мүшесі, айырмасы және N берілген. N-ші мүшесін табыңыз.",
+                input: "Үш сан: a1, d, n.",
+                output: "n-ші мүшесін шығарыңыз (an = a1 + (n-1)*d).",
+                examples: [{ input: "1 2 5", output: "9" }, { input: "5 3 4", output: "14" }],
+                check: (code) => code.includes('input') && (code.includes('*') || code.includes('+')),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('input')) errors.push("Үш санды оқу керек");
+                    return errors;
+                },
+                aiHelp: "Формула: an = a1 + (n - 1) * d. Жақшаларды дұрыс қойыңыз!"
+            },
+            {
+                id: 24, title: "Геометриялық прогрессия", complexity: "12%", time: "1 сек", memory: "16 МБ",
+                description: "Прогрессияның бірінші мүшесі, көбейткіші және N берілген. N-ші мүшесін табыңыз.",
+                input: "Үш сан: b1, q, n.",
+                output: "n-ші мүшесін шығарыңыз (bn = b1 * q^(n-1)).",
+                examples: [{ input: "2 2 4", output: "16" }, { input: "3 3 3", output: "27" }],
+                check: (code) => code.includes('**') || code.includes('pow'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('**') && !code.includes('pow')) errors.push("Дәреже (** операторы) қажет");
+                    return errors;
+                },
+                aiHelp: "Формула: bn = b1 * q ** (n - 1). Дәрежені есептеу үшін ** қолданылады."
+            },
+            {
+                id: 25, title: "Трапеция ауданы", complexity: "10%", time: "1 сек", memory: "16 МБ",
+                description: "Трапецияның екі табаны және биіктігі берілген. Ауданын табыңыз.",
+                input: "Үш сан: a, b (табандар), h (биіктік).",
+                output: "Ауданын шығарыңыз (S = (a+b)/2 * h).",
+                examples: [{ input: "3 7 4", output: "20" }, { input: "5 5 10", output: "50" }],
+                check: (code) => code.includes('input') && code.includes('/') && code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('/')) errors.push("Табандарды 2-ге бөлу керек");
+                    if (!code.includes('*')) errors.push("Көбейту операциясы қажет");
+                    return errors;
+                },
+                aiHelp: "Формула: S = (a + b) / 2 * h. Жақшаларды дұрыс қойыңыз, әйтпесе бөлу дұрыс болмауы мүмкін!"
+            }
+        ];
+
+        // C# ТАПСЫРМАЛАРЫ (25)
+        const csharpLessons = [
+            {
+                id: 1, title: "A + B", complexity: "2%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан A және B берілген. Олардың қосындысын табу керек.",
+                input: "Бір қатарда екі бүтін сан беріледі.",
+                output: "A + B қосындысын шығарыңыз.",
+                examples: [{ input: "2 3", output: "5" }, { input: "10 20", output: "30" }],
+                check: (code) => code.includes('Console.ReadLine') && code.includes('Console.WriteLine') && code.includes('int.Parse'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Console.ReadLine')) errors.push("Console.ReadLine() арқылы енгізу оқу керек");
+                    if (!code.includes('Console.WriteLine')) errors.push("Console.WriteLine() арқылы шығару керек");
+                    if (!code.includes('int.Parse') && !code.includes('Convert.ToInt32')) errors.push("Сан түріне айналдыру керек (int.Parse)");
+                    return errors;
+                },
+                aiHelp: "string[] inputs = Console.ReadLine().Split(); int a = int.Parse(inputs[0]); int b = int.Parse(inputs[1]); Console.WriteLine(a + b);"
+            },
+            {
+                id: 2, title: "Үш санның қосындысы", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Үш бүтін сан берілген. Олардың қосындысын табыңыз.",
+                input: "Бір қатарда үш бүтін сан беріледі.",
+                output: "Үш санның қосындысын шығарыңыз.",
+                examples: [{ input: "1 2 3", output: "6" }, { input: "5 10 15", output: "30" }],
+                check: (code) => code.includes('Split') && code.includes('int.Parse'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Split')) errors.push("Split() арқылы сөздерге бөлу керек");
+                    if (!code.includes('int.Parse')) errors.push("int.Parse арқылы санға айналдыру керек");
+                    return errors;
+                },
+                aiHelp: "Split() арқылы енгізуді бөлгеннен кейін үш айнымалыға сақтап, қосындысын шығарыңыз."
+            },
+            {
+                id: 3, title: "Айырма", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Айырмасын табыңыз (A - B).",
+                input: "Екі бүтін сан A және B.",
+                output: "A - B айырмасын шығарыңыз.",
+                examples: [{ input: "10 3", output: "7" }, { input: "5 8", output: "-3" }],
+                check: (code) => code.includes('-') && code.includes('Console'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('-')) errors.push("Азайту операциясы (-) табылмады");
+                    return errors;
+                },
+                aiHelp: "Екі санды оқығаннан кейін a - b деп айырмасын табыңыз."
+            },
+            {
+                id: 4, title: "Көбейтінді", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Көбейтіндісін табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Көбейтіндісін шығарыңыз.",
+                examples: [{ input: "4 5", output: "20" }, { input: "7 3", output: "21" }],
+                check: (code) => code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('*')) errors.push("Көбейту операциясы (*) табылмады");
+                    return errors;
+                },
+                aiHelp: "Көбейту үшін * операторын қолданыңыз."
+            },
+            {
+                id: 5, title: "Бөлінді", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Бүтін бөліндіні табыңыз.",
+                input: "Екі бүтін сан A және B.",
+                output: "A / B бүтін бөліндісін шығарыңыз.",
+                examples: [{ input: "17 5", output: "3" }, { input: "20 4", output: "5" }],
+                check: (code) => code.includes('/'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('/')) errors.push("Бөлу операциясы (/) табылмады");
+                    return errors;
+                },
+                aiHelp: "C#-да бүтін сандарды /-ге бөлгенде бүтін нәтиже шығады. Егер нақты сан болса, double пайдаланыңыз."
+            },
+            {
+                id: 6, title: "Қалдық", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Қалдықты табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "A % B қалдығын шығарыңыз.",
+                examples: [{ input: "17 5", output: "2" }, { input: "20 4", output: "0" }],
+                check: (code) => code.includes('%'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%')) errors.push("Қалдық операциясы (%) табылмады");
+                    return errors;
+                },
+                aiHelp: "Қалдықты табу үшін % операторын қолданыңыз."
+            },
+            {
+                id: 7, title: "Аумақты есептеу", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Тікбұрышты үшбұрыштың табаны және биіктігі берілген. Ауданын табыңыз.",
+                input: "Екі нақты сан - табан және биіктік.",
+                output: "Ауданын шығарыңыз (S = 0.5 * a * h).",
+                examples: [{ input: "10 5", output: "25" }, { input: "4 3", output: "6" }],
+                check: (code) => code.includes('0.5') || code.includes('/2') || code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('0.5') && !code.includes('/2')) errors.push("0.5 көбейткіші немесе 2-ге бөлу керек");
+                    return errors;
+                },
+                aiHelp: "Формула: S = 0.5 * taban * biyiktik. Немесе (taban * biyiktik) / 2"
+            },
+            {
+                id: 8, title: "Цилиндр көлемі", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Цилиндрдің радиусы және биіктігі берілген. Көлемін табыңыз (V = πr²h).",
+                input: "Екі нақты сан - радиус және биіктік.",
+                output: "Көлемін шығарыңыз (π = 3.14).",
+                examples: [{ input: "3 5", output: "141.3" }, { input: "2 10", output: "125.6" }],
+                check: (code) => code.includes('3.14') && code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('3.14')) errors.push("π = 3.14 мәнін қолданыңыз");
+                    if (!code.includes('*')) errors.push("Көбейту операциясы қажет");
+                    return errors;
+                },
+                aiHelp: "Формула: V = 3.14 * r * r * h. Екі рет r көбейтіледі!"
+            },
+            {
+                id: 9, title: "Валюта айырбасы", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Доллармен соманы теңгеге айналдырыңыз (1 USD = 500 KZT).",
+                input: "Бір нақты сан - доллар сомасы.",
+                output: "Теңгедегі соманы шығарыңыз.",
+                examples: [{ input: "100", output: "50000" }, { input: "50.5", output: "25250" }],
+                check: (code) => code.includes('500') || code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('500') && !code.includes('*')) errors.push("500-ге көбейту керек");
+                    return errors;
+                },
+                aiHelp: "Соманы 500-ге көбейтіңіз. Мысалы: double kzt = usd * 500;"
+            },
+            {
+                id: 10, title: "Жылдарды күндерге айналдыру", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Жылдар саны берілген. Оны күндерге айналдырыңыз (1 жыл = 365 күн).",
+                input: "Бір бүтін сан - жылдар саны.",
+                output: "Күндер санын шығарыңыз.",
+                examples: [{ input: "5", output: "1825" }, { input: "1", output: "365" }],
+                check: (code) => code.includes('365') || code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('365')) errors.push("365 көбейткіші қажет");
+                    return errors;
+                },
+                aiHelp: "Жылды 365-ке көбейтіңіз. int days = years * 365;"
+            },
+            {
+                id: 11, title: "Минимум табу", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Ең кішісін Math.Min арқылы табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Ең кіші санын шығарыңыз.",
+                examples: [{ input: "15 8", output: "8" }, { input: "20 20", output: "20" }],
+                check: (code) => code.includes('Math.Min'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Math.Min')) errors.push("Math.Min() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "Math.Min(a, b) функциясы екі санның кішісін қайтарады."
+            },
+            {
+                id: 12, title: "Максимум табу", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Ең үлкенін Math.Max арқылы табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Ең үлкен санын шығарыңыз.",
+                examples: [{ input: "15 8", output: "15" }, { input: "3 3", output: "3" }],
+                check: (code) => code.includes('Math.Max'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Math.Max')) errors.push("Math.Max() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "Math.Max(a, b) функциясы екі санның үлкенін қайтарады."
+            },
+            {
+                id: 13, title: "Дәреже", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Сан және дәреже берілген. Math.Pow арқылы есептеңіз.",
+                input: "Екі нақты сан - негіз және дәреже.",
+                output: "Нәтижені шығарыңыз.",
+                examples: [{ input: "2 3", output: "8" }, { input: "5 2", output: "25" }],
+                check: (code) => code.includes('Math.Pow'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Math.Pow')) errors.push("Math.Pow() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "Math.Pow(x, y) функциясы x-тің y дәрежесін қайтарады. Нәтиже double типті болады, сондықтан (int) түріне келтіру керек болуы мүмкін."
+            },
+            {
+                id: 14, title: "Төрт санның орташа мәні", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Төрт сан берілген. Орташа арифметикалықын табыңыз.",
+                input: "Төрт бүтін сан.",
+                output: "Орташа мәнін шығарыңыз.",
+                examples: [{ input: "10 20 30 40", output: "25" }, { input: "5 5 5 5", output: "5" }],
+                check: (code) => code.includes('/') && code.includes('+'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('+')) errors.push("Сандарды қосу керек");
+                    if (!code.includes('/')) errors.push("4-ке бөлу керек");
+                    return errors;
+                },
+                aiHelp: "Барлық сандарды қосып, 4-ке бөліңіз. Қосындыны double түрінде сақтау керек болуы мүмкін."
+            },
+            {
+                id: 15, title: "Шар көлемі", complexity: "7%", time: "1 сек", memory: "16 МБ",
+                description: "Шардың радиусы берілген. Көлемін табыңыз (V = 4/3 πr³).",
+                input: "Бір нақты сан - радиус.",
+                output: "Көлемін шығарыңыз (π = 3.14).",
+                examples: [{ input: "3", output: "113.04" }, { input: "1", output: "4.19" }],
+                check: (code) => code.includes('4') && code.includes('3') && code.includes('3.14'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('4') || !code.includes('3')) errors.push("4/3 коэффициенті қажет");
+                    if (!code.includes('3.14')) errors.push("π = 3.14 мәнін қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "Формула: (4.0 / 3.0) * 3.14 * r * r * r. Бүтін емес, нақты сандық бөлу керек (4.0 / 3.0)!"
+            },
+            {
+                id: 16, title: "IF шарты - Теңдеу", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Егер тең болса 'EQUAL', әйтпесе 'NOT EQUAL' деп шығарыңыз.",
+                input: "Екі бүтін сан.",
+                output: "'EQUAL' немесе 'NOT EQUAL'.",
+                examples: [{ input: "5 5", output: "EQUAL" }, { input: "3 4", output: "NOT EQUAL" }],
+                check: (code) => code.includes('if') && code.includes('=='),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('if')) errors.push("if шарты қажет");
+                    if (!code.includes('==')) errors.push("Теңдікті тексеру үшін == операторы керек");
+                    return errors;
+                },
+                aiHelp: "if (a == b) Console.WriteLine('EQUAL'); else Console.WriteLine('NOT EQUAL');"
+            },
+            {
+                id: 17, title: "IF шарты - Салыстыру", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Біріншісі үлкен болса 'FIRST', кіші болса 'SECOND', тең болса 'EQUAL' деп шығарыңыз.",
+                input: "Екі бүтін сан.",
+                output: "'FIRST', 'SECOND' немесе 'EQUAL'.",
+                examples: [{ input: "10 5", output: "FIRST" }, { input: "3 8", output: "SECOND" }],
+                check: (code) => code.includes('if') && code.includes('else'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('if')) errors.push("if шарты қажет");
+                    if (!code.includes('else')) errors.push("else бөлігі қажет");
+                    return errors;
+                },
+                aiHelp: "if-else if-else құрылымын қолданыңыз. Алдымен >, соданнан <, ақырында == тексеріңіз."
+            },
+            {
+                id: 18, title: "Тақ немесе жұп", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Бір сан берілген. Тақ немесе жұп екенін тексеріңіз.",
+                input: "Бір бүтін сан.",
+                output: "Жұп болса 'EVEN', тақ болса 'ODD'.",
+                examples: [{ input: "4", output: "EVEN" }, { input: "7", output: "ODD" }],
+                check: (code) => code.includes('%') && code.includes('2'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%')) errors.push("% операторы арқылы қалдықты тексеру керек");
+                    if (!code.includes('2')) errors.push("2-ге бөлу керек");
+                    return errors;
+                },
+                aiHelp: "if (n % 2 == 0) 'EVEN', әйтпесе 'ODD'. % 2 қалдығын 0-ге тексеру керек."
+            },
+            {
+                id: 19, title: "Санның модульді", complexity: "7%", time: "1 сек", memory: "16 МБ",
+                description: "Сан берілген. Math.Abs арқылы модулін табыңыз.",
+                input: "Бір бүтін сан (теріс болуы мүмкін).",
+                output: "Модулін шығарыңыз.",
+                examples: [{ input: "-15", output: "15" }, { input: "10", output: "10" }],
+                check: (code) => code.includes('Math.Abs'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Math.Abs')) errors.push("Math.Abs() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "Math.Abs(n) функциясы санның абсолюттік мәнін қайтарады."
+            },
+            {
+                id: 20, title: "Үш санның ең кішісі", complexity: "9%", time: "1 сек", memory: "16 МБ",
+                description: "Үш сан берілген. Ең кішісін Math.Min қолдана отырып табыңыз.",
+                input: "Үш бүтін сан.",
+                output: "Ең кіші санын шығарыңыз.",
+                examples: [{ input: "5 2 8", output: "2" }, { input: "10 10 5", output: "5" }],
+                check: (code) => code.includes('Math.Min'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Math.Min')) errors.push("Math.Min() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "Math.Min(Math.Min(a, b), c) - үш санды салыстыру үшін Math.Min екі рет қолданылады."
+            },
+            {
+                id: 21, title: "Тікбұрышты үшбұрыш", complexity: "10%", time: "1 сек", memory: "16 МБ",
+                description: "Үш қабырға берілген. Тікбұрышты үшбұрыш екенін тексеріңіз (Пифагор теоремасы).",
+                input: "Үш бүтін сан - қабырғалар.",
+                output: "Тікбұрышты болса 'YES', әйтпесе 'NO'.",
+                examples: [{ input: "3 4 5", output: "YES" }, { input: "1 2 3", output: "NO" }],
+                check: (code) => code.includes('*') && code.includes('if'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('*')) errors.push("Квадраттау үшін көбейту керек");
+                    if (!code.includes('if')) errors.push("Шартты тексеру if қажет");
+                    return errors;
+                },
+                aiHelp: "Тікбұрышты үшбұрыш: a² + b² = c² (c - ең үлкен қабырға). Барлық комбинацияларды тексеру керек."
+            },
+            {
+                id: 22, title: "Сандарды сұрыптау", complexity: "12%", time: "1 сек", memory: "16 МБ",
+                description: "Үш сан берілген. Өсу бойынша сұрыптаңыз (Array.Sort қолданыңыз).",
+                input: "Үш бүтін сан.",
+                output: "Сұрыпталған сандар (бос орынмен бөлінген).",
+                examples: [{ input: "3 1 2", output: "1 2 3" }],
+                check: (code) => code.includes('Array.Sort') || code.includes('OrderBy'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('Array.Sort') && !code.includes('OrderBy')) errors.push("Сұрыптау үшін Array.Sort() немесе OrderBy() қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "int[] arr = {a, b, c}; Array.Sort(arr); содан кейін массив элементтерін шығарыңыз."
+            },
+            {
+                id: 23, title: "Жылдық пайыздық ставка", complexity: "10%", time: "1 сек", memory: "16 МБ",
+                description: "Бастапқы сома, жылдық ставка және жылдар саны берілген. Қаражатты есептеңіз.",
+                input: "Үш нақты сан: P, r, t.",
+                output: "Жинақталған соманы шығарыңыз (A = P(1 + rt)).",
+                examples: [{ input: "1000 0.05 10", output: "1500" }],
+                check: (code) => code.includes('*') && code.includes('+'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('1')) errors.push("Формулада 1 + rt бар");
+                    return errors;
+                },
+                aiHelp: "Формула: A = P * (1 + r * t). Жақшаларды дұрыс қойыңыз!"
+            },
+            {
+                id: 24, title: "Время в пути", complexity: "11%", time: "1 сек", memory: "16 МБ",
+                description: "Қашықтық және жылдамдық берілген. Уақытты табыңыз (t = s / v).",
+                input: "Екі нақты сан - қашықтық (км) және жылдамдық (км/сағ).",
+                output: "Уақытты сағатпен шығарыңыз.",
+                examples: [{ input: "100 50", output: "2" }, { input: "300 60", output: "5" }],
+                check: (code) => code.includes('/'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('/')) errors.push("Бөлу операциясы (/) қажет");
+                    return errors;
+                },
+                aiHelp: "Уақыт = Қашықтық / Жылдамдық. Екі санды бөліңіз."
+            },
+            {
+                id: 25, title: "Келесі жұп сан", complexity: "12%", time: "1 сек", memory: "16 МБ",
+                description: "Бір сан берілген. Одан кейінгі жұп санды табыңыз.",
+                input: "Бір бүтін сан N.",
+                output: "N-ден кейінгі жұп сан.",
+                examples: [{ input: "4", output: "6" }, { input: "7", output: "8" }],
+                check: (code) => code.includes('%') || code.includes('+'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%') && !code.includes('+')) errors.push("% (қалдық) немесе + (қосу) операциясы қажет");
+                    return errors;
+                },
+                aiHelp: "Егер сан жұп болса (n % 2 == 0), келесі жұп n + 2. Егер тақ болса, n + 1."
+            }
+        ];
+
+        // C++ ТАПСЫРМАЛАРЫ (25)
+        const cppLessons = [
+            {
+                id: 1, title: "A + B", complexity: "2%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан A және B берілген. Олардың қосындысын табу керек.",
+                input: "Бір қатарда екі бүтін сан беріледі.",
+                output: "A + B қосындысын шығарыңыз.",
+                examples: [{ input: "2 3", output: "5" }, { input: "10 20", output: "30" }],
+                check: (code) => code.includes('cin') && code.includes('cout') && code.includes('>>'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('cin')) errors.push("cin арқылы енгізу оқу керек");
+                    if (!code.includes('cout')) errors.push("cout арқылы шығару керек");
+                    if (!code.includes('>>')) errors.push(">> операторы арқылы айнымалыға жазу керек");
+                    return errors;
+                },
+                aiHelp: "int a, b; cin >> a >> b; cout << a + b; ескерту: #include <iostream> және using namespace std; қажет"
+            },
+            {
+                id: 2, title: "Үш санның қосындысы", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Үш бүтін сан берілген. Олардың қосындысын табыңыз.",
+                input: "Бір қатарда үш бүтін сан беріледі.",
+                output: "Үш санның қосындысын шығарыңыз.",
+                examples: [{ input: "1 2 3", output: "6" }, { input: "5 10 15", output: "30" }],
+                check: (code) => code.includes('cin') && code.includes('cout'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('cin')) errors.push("cin арқылы енгізу керек");
+                    if (!code.includes('cout')) errors.push("cout арқылы шығару керек");
+                    return errors;
+                },
+                aiHelp: "Үш айнымалыны бір cin >> a >> b >> c; жолында оқуға болады."
+            },
+            {
+                id: 3, title: "Айырма", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Айырмасын табыңыз (A - B).",
+                input: "Екі бүтін сан A және B.",
+                output: "A - B айырмасын шығарыңыз.",
+                examples: [{ input: "10 3", output: "7" }, { input: "5 8", output: "-3" }],
+                check: (code) => code.includes('-') && code.includes('cin'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('-')) errors.push("Азайту операциясы (-) табылмады");
+                    return errors;
+                },
+                aiHelp: "cout << a - b; деп айырмасын шығаруға болады."
+            },
+            {
+                id: 4, title: "Көбейтінді", complexity: "3%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Көбейтіндісін табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Көбейтіндісін шығарыңыз.",
+                examples: [{ input: "4 5", output: "20" }, { input: "7 3", output: "21" }],
+                check: (code) => code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('*')) errors.push("Көбейту операциясы (*) табылмады");
+                    return errors;
+                },
+                aiHelp: "Көбейту үшін * операторын қолданыңыз."
+            },
+            {
+                id: 5, title: "Бөлінді", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Бүтін бөліндіні табыңыз.",
+                input: "Екі бүтін сан A және B.",
+                output: "A / B бүтін бөліндісін шығарыңыз.",
+                examples: [{ input: "17 5", output: "3" }, { input: "20 4", output: "5" }],
+                check: (code) => code.includes('/'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('/')) errors.push("Бөлу операциясы (/) табылмады");
+                    return errors;
+                },
+                aiHelp: "C++-та екі бүтін санды /-ге бөлгенде бүтін нәтиже шығады (5/2 = 2). Нақты сан керек болса, double түріне келтіріңіз."
+            },
+            {
+                id: 6, title: "Қалдық", complexity: "4%", time: "1 сек", memory: "16 МБ",
+                description: "Екі бүтін сан берілген. Қалдықты табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "A % B қалдығын шығарыңыз.",
+                examples: [{ input: "17 5", output: "2" }, { input: "20 4", output: "0" }],
+                check: (code) => code.includes('%'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%')) errors.push("Қалдық операциясы (%) табылмады");
+                    return errors;
+                },
+                aiHelp: "Қалдықты табу үшін % операторын қолданыңыз."
+            },
+            {
+                id: 7, title: "Үшбұрыштың периметрі", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Үшбұрыштың үш қабырғасы берілген. Периметрін табыңыз.",
+                input: "Үш бүтін сан - қабырғалар ұзындығы.",
+                output: "Периметрін шығарыңыз.",
+                examples: [{ input: "3 4 5", output: "12" }, { input: "10 10 10", output: "30" }],
+                check: (code) => code.includes('cin') && code.includes('cout'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('cin')) errors.push("Қабырғаларды оқу керек");
+                    return errors;
+                },
+                aiHelp: "Үш санды оқыңыз және оларды қосыңыз. Периметр = a + b + c"
+            },
+            {
+                id: 8, title: "Тік төртбұрыштың ауданы", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Тік төртбұрыштың ені мен ұзындығы берілген. Ауданын табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Ауданын шығарыңыз.",
+                examples: [{ input: "5 3", output: "15" }, { input: "10 10", output: "100" }],
+                check: (code) => code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('*')) errors.push("Аудан = ені × ұзындық, көбейту керек");
+                    return errors;
+                },
+                aiHelp: "Тік төртбұрыш ауданы = ені × ұзындық. Екі санды көбейтіңіз."
+            },
+            {
+                id: 9, title: "Шеңбердің ауданы", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Шеңбердің радиусы берілген. Ауданын табыңыз (S = πr²).",
+                input: "Бір нақты сан - радиус R.",
+                output: "Ауданын шығарыңыз (π = 3.14).",
+                examples: [{ input: "5", output: "78.5" }, { input: "1", output: "3.14" }],
+                check: (code) => code.includes('3.14') && code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('3.14')) errors.push("π = 3.14 мәнін қолданыңыз");
+                    if (!code.includes('*')) errors.push("Көбейту операциясы қажет");
+                    return errors;
+                },
+                aiHelp: "Формула: S = 3.14 * r * r. double түрін қолданыңыз нақты сан үшін."
+            },
+            {
+                id: 10, title: "Гипотенуза", complexity: "7%", time: "1 сек", memory: "16 МБ",
+                description: "Тікбұрышты үшбұрыштың екі катеті берілген. Гипотенузасын табыңыз (c = √(a²+b²)).",
+                input: "Екі нақты сан - катеттер.",
+                output: "Гипотенузаны шығарыңыз.",
+                examples: [{ input: "3 4", output: "5" }, { input: "5 12", output: "13" }],
+                check: (code) => code.includes('sqrt') || code.includes('*'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('sqrt') && !code.includes('*')) errors.push("sqrt() функциясы немесе көбейту керек");
+                    return errors;
+                },
+                aiHelp: "sqrt(a*a + b*b) деп есептеу керек. #include <cmath> қосуды ұмытпаңыз!"
+            },
+            {
+                id: 11, title: "Минимум екі саннан", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Ең кішісін табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Ең кіші санын шығарыңыз.",
+                examples: [{ input: "5 3", output: "3" }, { input: "10 20", output: "10" }],
+                check: (code) => code.includes('min') || code.includes('if') || code.includes('<'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('min') && !code.includes('if') && !code.includes('<')) errors.push("min() функциясы немесе if шарты қажет");
+                    return errors;
+                },
+                aiHelp: "min(a, b) функциясын қолданыңыз немесе if (a < b) cout << a; else cout << b;"
+            },
+            {
+                id: 12, title: "Максимум екі саннан", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Ең үлкенін табыңыз.",
+                input: "Екі бүтін сан.",
+                output: "Ең үлкен санын шығарыңыз.",
+                examples: [{ input: "5 3", output: "5" }, { input: "10 20", output: "20" }],
+                check: (code) => code.includes('max') || code.includes('if') || code.includes('>'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('max') && !code.includes('if') && !code.includes('>')) errors.push("max() функциясы немесе if шарты қажет");
+                    return errors;
+                },
+                aiHelp: "max(a, b) функциясын қолданыңыз немесе if (a > b) деп тексеріңіз."
+            },
+            {
+                id: 13, title: "Модуль саны", complexity: "5%", time: "1 сек", memory: "16 МБ",
+                description: "Сан берілген. Оның модулін табыңыз.",
+                input: "Бір бүтін сан (теріс болуы мүмкін).",
+                output: "Модулін шығарыңыз.",
+                examples: [{ input: "-5", output: "5" }, { input: "10", output: "10" }],
+                check: (code) => code.includes('abs'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('abs')) errors.push("abs() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "abs(n) функциясы модульді табуға арналған. #include <cstdlib> немесе <cmath> қажет болуы мүмкін."
+            },
+            {
+                id: 14, title: "Дәреже", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Сан және дәреже берілген. pow функциясымен есептеңіз.",
+                input: "Екі нақты сан - негіз және дәреже.",
+                output: "Нәтижені шығарыңыз.",
+                examples: [{ input: "2 3", output: "8" }, { input: "5 2", output: "25" }],
+                check: (code) => code.includes('pow'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('pow')) errors.push("pow() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "pow(x, y) функциясы x-тің y дәрежесін қайтарады. #include <cmath> қажет!"
+            },
+            {
+                id: 15, title: "Тамыр", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Сан берілген. Квадрат түбірін табыңыз.",
+                input: "Бір нақты сан.",
+                output: "Түбірін шығарыңыз.",
+                examples: [{ input: "16", output: "4" }, { input: "2.25", output: "1.5" }],
+                check: (code) => code.includes('sqrt'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('sqrt')) errors.push("sqrt() функциясын қолданыңыз");
+                    return errors;
+                },
+                aiHelp: "sqrt(n) функциясы квадрат түбірін қайтарады. #include <cmath> қажет."
+            },
+            {
+                id: 16, title: "Жұп немесе тақ", complexity: "6%", time: "1 сек", memory: "16 МБ",
+                description: "Бір сан берілген. Жұп екенін тексеріңіз.",
+                input: "Бір бүтін сан N.",
+                output: "Жұп болса 'EVEN', тақ болса 'ODD' деп шығарыңыз.",
+                examples: [{ input: "4", output: "EVEN" }, { input: "7", output: "ODD" }],
+                check: (code) => code.includes('%') && code.includes('if'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%')) errors.push("2-ге бөліндірлігін тексеру үшін % 2 операторы керек");
+                    if (!code.includes('if')) errors.push("Шартты тексеру if қажет");
+                    return errors;
+                },
+                aiHelp: "if (n % 2 == 0) cout << 'EVEN'; else cout << 'ODD';"
+            },
+            {
+                id: 17, title: "Теңдеу тексеру", complexity: "7%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Егер тең болса 'EQUAL', әйтпесе 'NOT EQUAL' деп шығарыңыз.",
+                input: "Екі бүтін сан.",
+                output: "'EQUAL' немесе 'NOT EQUAL'.",
+                examples: [{ input: "5 5", output: "EQUAL" }, { input: "3 4", output: "NOT EQUAL" }],
+                check: (code) => code.includes('if') && code.includes('=='),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('if')) errors.push("if шарты қажет");
+                    if (!code.includes('==')) errors.push("Теңдікті тексеру үшін == операторы керек");
+                    return errors;
+                },
+                aiHelp: "if (a == b) cout << 'EQUAL'; else cout << 'NOT EQUAL';"
+            },
+            {
+                id: 18, title: "Салыстыру", complexity: "7%", time: "1 сек", memory: "16 МБ",
+                description: "Екі сан берілген. Біріншісі үлкен болса 'FIRST', кіші болса 'SECOND', тең болса 'EQUAL' деп шығарыңыз.",
+                input: "Екі бүтін сан.",
+                output: "'FIRST', 'SECOND' немесе 'EQUAL'.",
+                examples: [{ input: "10 5", output: "FIRST" }, { input: "3 8", output: "SECOND" }],
+                check: (code) => code.includes('if') && code.includes('else'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('if')) errors.push("if шарты қажет");
+                    if (!code.includes('else')) errors.push("else бөлігі қажет");
+                    return errors;
+                },
+                aiHelp: "if-else if-else құрылымын қолданыңыз. Алдымен >, соданнан <, ақырында == тексеріңіз."
+            },
+            {
+                id: 19, title: "Үш санның ең кішісі", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Үш сан берілген. Ең кішісін табыңыз.",
+                input: "Үш бүтін сан.",
+                output: "Ең кіші санын шығарыңыз.",
+                examples: [{ input: "5 2 8", output: "2" }, { input: "10 10 5", output: "5" }],
+                check: (code) => code.includes('min') || code.includes('if'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('min') && !code.includes('if')) errors.push("min() немесе if шарттары қажет");
+                    return errors;
+                },
+                aiHelp: "min(min(a, b), c) - үш санды салыстыру үшін min екі рет қолданылады."
+            },
+            {
+                id: 20, title: "Үш санның ең үлкені", complexity: "8%", time: "1 сек", memory: "16 МБ",
+                description: "Үш сан берілген. Ең үлкенін табыңыз.",
+                input: "Үш бүтін сан.",
+                output: "Ең үлкен санын шығарыңыз.",
+                examples: [{ input: "5 2 8", output: "8" }, { input: "10 10 5", output: "10" }],
+                check: (code) => code.includes('max') || code.includes('if'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('max') && !code.includes('if')) errors.push("max() немесе if шарттары қажет");
+                    return errors;
+                },
+                aiHelp: "max(max(a, b), c) - үш санды салыстыру үшін max екі рет қолданылады."
+            },
+            {
+                id: 21, title: "Сандарды сұрыптау", complexity: "10%", time: "1 сек", memory: "16 МБ",
+                description: "Үш сан берілген. Өсу бойынша сұрыптаңыз.",
+                input: "Үш бүтін сан.",
+                output: "Сұрыпталған сандар (бос орынмен бөлінген).",
+                examples: [{ input: "3 1 2", output: "1 2 3" }],
+                check: (code) => code.includes('if') || code.includes('swap') || code.includes('sort'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('if') && !code.includes('swap') && !code.includes('sort')) errors.push("Сұрыптау логикасы қажет");
+                    return errors;
+                },
+                aiHelp: "Қолмен if арқылы салыстырып, swap арқылы ауыстыру керек. Немесе sort() функциясын қолданыңыз."
+            },
+            {
+                id: 22, title: "Тікбұрышты үшбұрыш", complexity: "10%", time: "1 сек", memory: "16 МБ",
+                description: "Үш қабырға берілген. Тікбұрышты үшбұрыш екенін тексеріңіз.",
+                input: "Үш бүтін сан - қабырғалар.",
+                output: "Тікбұрышты болса 'YES', әйтпесе 'NO'.",
+                examples: [{ input: "3 4 5", output: "YES" }, { input: "1 2 3", output: "NO" }],
+                check: (code) => code.includes('*') && code.includes('if'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('*')) errors.push("Квадраттау үшін көбейту керек");
+                    if (!code.includes('if')) errors.push("Шартты тексеру if қажет");
+                    return errors;
+                },
+                aiHelp: "Тікбұрышты үшбұрыш: a² + b² = c² (c - ең үлкен қабырға). Барлық комбинацияларды тексеру керек."
+            },
+            {
+                id: 23, title: "Цифрлар қосындысы", complexity: "9%", time: "1 сек", memory: "16 МБ",
+                description: "Екі таңбалы сан берілген. Цифрлар қосындысын табыңыз.",
+                input: "Бір екі таңбалы бүтін сан.",
+                output: "Цифрлар қосындысын шығарыңыз.",
+                examples: [{ input: "45", output: "9" }, { input: "10", output: "1" }],
+                check: (code) => code.includes('%') && code.includes('/'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%')) errors.push("% 10 арқылы соңғы цифрды алу керек");
+                    if (!code.includes('/')) errors.push("/ 10 арқылы бірінші цифрды алу керек");
+                    return errors;
+                },
+                aiHelp: "Соңғы цифр: n % 10. Бірінші цифр: n / 10. Екеуін қосыңыз."
+            },
+            {
+                id: 24, title: "Секундтарды уақытқа айналдыру", complexity: "11%", time: "1 сек", memory: "16 МБ",
+                description: "Күн басталғаннан бергі секундтар саны берілген. Қазіргі уақытты HH:MM:SS форматында шығарыңыз.",
+                input: "Бір бүтін сан - секундтар (0 ≤ N < 86400).",
+                output: "Уақытты HH:MM:SS форматында.",
+                examples: [{ input: "3661", output: "01:01:01" }, { input: "0", output: "00:00:00" }],
+                check: (code) => code.includes('/') && code.includes('%'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('/')) errors.push("Бөлу операциясы қажет");
+                    if (!code.includes('%')) errors.push("Қалдық операциясы қажет");
+                    return errors;
+                },
+                aiHelp: "Сағат = N / 3600, минут = (N % 3600) / 60, секунд = N % 60. Форматтау үшін setw және setfill қолданыңыз."
+            },
+            {
+                id: 25, title: "Келесі жұп сан", complexity: "10%", time: "1 сек", memory: "16 МБ",
+                description: "Бір сан берілген. Одан кейінгі жұп санды табыңыз.",
+                input: "Бір бүтін сан N.",
+                output: "N-ден кейінгі жұп сан.",
+                examples: [{ input: "4", output: "6" }, { input: "7", output: "8" }],
+                check: (code) => code.includes('%') || code.includes('+'),
+                validate: (code) => {
+                    const errors = [];
+                    if (!code.includes('%') && !code.includes('+')) errors.push("% (қалдық) немесе + (қосу) операциясы қажет");
+                    return errors;
+                },
+                aiHelp: "Егер сан жұп болса (n % 2 == 0), келесі жұп n + 2. Егер тақ болса, n + 1."
+            }
+        ];
+
+        // Барлық тапсырмаларды бір жерге жинау
+        const lessons = {
+            'Python': pythonLessons,
+            'C#': csharpLessons,
+            'C++': cppLessons
+        };
+
+
+        function start(lang) {
+            curL = lang;
+            curI = 0;
+            unlocked = 0;
+            document.getElementById('cur-lang').innerText = lang + " Курсы";
+            document.getElementById('welcome').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+
+            // Файл атын өзгерту
+            const filename = lang === 'Python' ? 'main.py' : lang === 'C#' ? 'Program.cs' : 'main.cpp';
+            document.getElementById('filename').innerText = filename;
+
+            // Батырма түсін өзгерту
+            const checkBtn = document.getElementById('check-btn');
+            checkBtn.className = 'btn-run';
+            if (lang === 'C#') checkBtn.classList.add('csharp');
+            if (lang === 'C++') checkBtn.classList.add('cpp');
+
+            // Placeholder өзгерту
+            const placeholder = lang === 'Python' ? '# Кодты осында жазыңыз...' : lang === 'C#' ? '// Кодты осында жазыңыз...' : '// Кодты осында жазыңыз...';
+            document.getElementById('code-input').placeholder = placeholder;
+
+            renderList();
+            loadLesson();
+        }
+
+        function goBack() {
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('welcome').classList.remove('hidden');
+        }
+
+        function renderList() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            lessons[curL].forEach((l, i) => {
+                const node = document.createElement('div');
+                const isUnlocked = i <= unlocked;
+                let activeClass = '';
+                if (i === curI) {
+                    if (curL === 'Python') activeClass = 'active';
+                    else if (curL === 'C#') activeClass = 'csharp-active';
+                    else if (curL === 'C++') activeClass = 'cpp-active';
+                }
+                node.className = `task-node ${isUnlocked ? 'unlocked' : ''} ${activeClass}`;
+                node.innerHTML = `<i class='bx ${i < unlocked ? 'bxs-check-circle' : 'bx-code-alt'}'></i> ${i + 1}. ${l.title}`;
+                if (isUnlocked) node.onclick = () => { curI = i; renderList(); loadLesson(); };
+                list.appendChild(node);
+            });
+        }
+
+        function loadLesson() {
+            const l = lessons[curL][curI];
+            const examplesHtml = l.examples.map((ex, idx) => `
+        <tr>
+            <td>${idx + 1}</td>
+            <td><code>${ex.input}</code></td>
+            <td><code>${ex.output}</code></td>
+        </tr>
+    `).join('');
+
+            const langClass = curL === 'C#' ? 'csharp' : curL === 'C++' ? 'cpp' : '';
+            const borderColor = curL === 'C#' ? 'var(--csharp)' : curL === 'C++' ? 'var(--cpp)' : 'var(--primary)';
+
+            document.getElementById('task-content').innerHTML = `
+        <div class="complexity-badge">Қиындығы: ${l.complexity}</div>
+        
+        <div class="task-title" style="border-left: 4px solid ${borderColor}; padding-left: 15px;">${l.id}. ${l.title}</div>
+        <div class="task-description ${langClass}">
+            <div class="task-text">${l.description}</div>
+            
+            <div class="io-section">
+                <div class="io-title ${langClass}">📥 Кіріс деректері (INPUT)</div>
+                <div class="io-content">${l.input}</div>
+            </div>
+            
+            <div class="io-section">
+                <div class="io-title ${langClass}">📤 Шығыс деректері (OUTPUT)</div>
+                <div class="io-content">${l.output}</div>
+            </div>
+
+            <div class="io-section">
+                <div class="io-title ${langClass}">📝 Мысалдар</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th class="${langClass}">№</th>
+                            <th class="${langClass}">INPUT</th>
+                            <th class="${langClass}">OUTPUT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${examplesHtml}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+            document.getElementById('code-input').value = "";
+            document.getElementById('out').innerText = "> Жүйе дайын...";
+            document.getElementById('out').style.color = "#fff";
+            document.getElementById('status-badge').innerText = "Дайын";
+            document.getElementById('status-badge').style.color = "#94a3b8";
+        }
+
+        function checkCode() {
+            const code = document.getElementById('code-input').value.trim();
+            const out = document.getElementById('out');
+            const statusBadge = document.getElementById('status-badge');
+            const lesson = lessons[curL][curI];
+
+            if (!code) {
+                out.innerText = "> ҚАТЕ: Код жазылмаған!";
+                out.style.color = "#ef4444";
+                statusBadge.innerText = "Қате";
+                statusBadge.style.color = "#ef4444";
+                return;
+            }
+
+            // Тексеру функциясын шақыру
+            const isCorrect = lesson.check(code);
+            const errors = lesson.validate ? lesson.validate(code) : [];
+
+            if (isCorrect && errors.length === 0) {
+
+                // 🔥 ОСЫНЫ ҚОСТЫҚ (ПРОГРЕСС САҚТАУ)
+                const user = localStorage.getItem("currentUser");
+                localStorage.setItem("task_" + user, curI);
+
+                out.innerText = "> ДҰРЫС! ✅\n> Барлық тексерулерден өтті.\n> Келесі сабақ ашылды.";
+                out.style.color = "#10b981";
+                statusBadge.innerText = "Сәтті";
+                statusBadge.style.color = "#10b981";
+
+                if (curI === unlocked && unlocked < lessons[curL].length - 1) {
+                    unlocked++;
+                }
+
+                setTimeout(() => {
+                    if (curI < lessons[curL].length - 1) {
+                        curI++;
+                        renderList();
+                        loadLesson();
+                    }
+                }, 2000);
+            } else {
+                let errorMsg = "> ҚАТЕ! ❌\n";
+
+                if (errors.length > 0) {
+                    errorMsg += "> Табылған қателер:\n";
+                    errors.forEach((err, idx) => {
+                        errorMsg += `> ${idx + 1}. ${err}\n`;
+                    });
+                } else {
+                    errorMsg += "> Код тапсырма шартын орындамайды.\n";
+                    errorMsg += "> Логиканы тексеріп, қайта жазыңыз.\n";
+                }
+
+                out.innerText = errorMsg;
+                out.style.color = "#ef4444";
+                statusBadge.innerText = "Қате";
+                statusBadge.style.color = "#ef4444";
+            }
+        }
+
+        function showAIHelp() {
+            const lesson = lessons[curL][curI];
+            const aiText = document.getElementById('ai-text');
+
+            // Тілге сай ескертулер
+            let langSpecific = '';
+            if (curL === 'C#') {
+                langSpecific = '<div style="background: #f3e8ff; padding: 10px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #9b4f96;"><strong>C# ескертулері:</strong> using System; қосуды ұмытпаңыз! Консоль үшін Console класын қолданыңыз.</div>';
+            } else if (curL === 'C++') {
+                langSpecific = '<div style="background: #dbeafe; padding: 10px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #00599c;"><strong>C++ ескертулері:</strong> #include <iostream> және using namespace std; қажет! Енгізу/шығару үшін cin/cout қолданыңыз.</div>';
+            }
+
+            aiText.innerHTML = `
+        <div style="background: #fef3c7; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #f59e0b;">
+            <strong>💡 Көмек:</strong> Бұл тапсырма бойынша нұсқаулық
+        </div>
+        ${langSpecific}
+        <p>${lesson.aiHelp}</p>
+        <div style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 10px; font-size: 13px; color: #64748b;">
+            <strong>Ескерту:</strong> AI тікелей жауап айтпайды, тек бағыт-бағдар береді. Кодты өзіңіз жазу керек!
+        </div>
+    `;
+
+            document.getElementById('ai-modal').classList.add('active');
+        }
+
+        function closeAIModal(event) {
+            if (!event || event.target.id === 'ai-modal' || event.target.classList.contains('ai-close')) {
+                document.getElementById('ai-modal').classList.remove('active');
+            }
+        }
+
+        // Клавиатура тіркемелері
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                checkCode();
+            }
+        });
+
+        function saveTaskProgress() {
+            const user = localStorage.getItem("currentUser");
+            localStorage.setItem("task_" + user, curI);
+        }
+    </script>
+</body>
+
+</html>
