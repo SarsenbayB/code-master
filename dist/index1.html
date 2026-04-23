@@ -425,14 +425,15 @@
             try {
                 btn.disabled = true;
                 btn.innerHTML = '<span class="loader"></span> Жүктелуде...';
+
                 await auth.register(email, password, fullName);
-                showToast("Тіркелу сәтті! Енді жүйеге кіре аласыз.", "success");
-                // Wait a bit then switch to login
+
+                showToast("Тіркелу сәтті!", "success");
+
                 setTimeout(() => {
-                    container.classList.remove('active');
-                    btn.disabled = false;
-                    btn.innerHTML = 'Тіркелу';
-                }, 2000);
+                    window.location.href = 'register1.html#home';
+                }, 1500);
+
             } catch (error) {
                 showToast(error.message, "error");
                 btn.disabled = false;
